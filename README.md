@@ -147,8 +147,8 @@ FROM generate_series(1, 6) AS row,
 2. No menu lateral, clica em **Authentication** > **Users**
 3. Clica no botão **"Add user"** ou **"Invite user"**
 4. Preenche:
-   - **Email**: `admin@junifeup.pt`
-   - **Password**: `12345678!`
+   - **Email**: 
+   - **Password**: 
    - Marca **"Auto Confirm User"** (para não precisar de confirmar email)
 5. Clica em **"Create user"**
 
