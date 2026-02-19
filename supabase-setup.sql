@@ -39,32 +39,43 @@ ALTER TABLE seats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reservations ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for movies
+DROP POLICY IF EXISTS "Anyone can read movies" ON movies;
 CREATE POLICY "Anyone can read movies" ON movies
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Only admins can manage movies" ON movies;
 CREATE POLICY "Only admins can manage movies" ON movies
   FOR ALL USING (auth.role() = 'authenticated');
 
 -- RLS Policies for seats
+DROP POLICY IF EXISTS "Anyone can read seats" ON seats;
 CREATE POLICY "Anyone can read seats" ON seats
   FOR SELECT USING (true);
 
 -- RLS Policies for reservations
+DROP POLICY IF EXISTS "Anyone can read reservations" ON reservations;
 CREATE POLICY "Anyone can read reservations" ON reservations
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Anyone can create reservations" ON reservations;
 CREATE POLICY "Anyone can create reservations" ON reservations
   FOR INSERT WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Only admins can delete reservations" ON reservations;
 CREATE POLICY "Only admins can delete reservations" ON reservations
   FOR DELETE USING (auth.role() = 'authenticated');
 
 -- Allow users to delete their own reservations by name
 -- Note: This is a simple implementation. For production, consider using a more secure method
+DROP POLICY IF EXISTS "Users can delete their own reservations" ON reservations;
 CREATE POLICY "Users can delete their own reservations" ON reservations
   FOR DELETE USING (true);
 
 -- Initialize seats
+-- First, delete existing seats and reservations (if re-running script)
+DELETE FROM reservations;
+DELETE FROM seats;
+
 -- Zone 1: Tables (4 tables, 2 seats each)
 INSERT INTO seats (type, zone, row, position, table_number) VALUES
   ('table', 1, 1, 'A', 1), ('table', 1, 1, 'B', 1),
@@ -92,6 +103,9 @@ FROM generate_series(1, 6) AS row,
      generate_series(1, 4) AS pos;
 
 -- Create a sample movie (optional)
+-- Delete existing movies first (if re-running script)
+DELETE FROM movies;
+
 INSERT INTO movies (title, poster_url, synopsis, session_date, session_time) VALUES
   (
     'Filme Surpresa',
