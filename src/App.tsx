@@ -6,7 +6,7 @@ import AdminDashboard from './pages/AdminDashboard'
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/junifeup-cinema">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/reserve" element={<ReservationPage />} />
